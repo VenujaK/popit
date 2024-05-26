@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Employee</h1>
+        <form action="/add" method="POST">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="first_name">First Name:</label>
+                    <input type="text" name="first_name" id="first_name" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="last_name">Last Name:</label>
+                    <input type="text" name="last_name" id="last_name" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="position">Position:</label>
+                    <input type="text" name="position" id="position" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="contact_no">Contact No:</label>
+                    <input type="text" name="contact_no" id="contact_no" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="personal_email">Personal Email:</label>
+                    <input type="email" name="personal_email" id="personal_email" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="work_email">Work Email:</label>
+                    <input type="email" name="work_email" id="work_email" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="manager">Manager:</label>
+                    <input type="text" name="manager" id="manager" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="team_leader">Team Leader:</label>
+                    <input type="text" name="team_leader" id="team_leader" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="blood_group">Blood Group:</label>
+                    <input type="text" name="blood_group" id="blood_group" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="age">Age:</label>
+                    <input type="number" name="age" id="age" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="sex">Sex:</label>
+                    <input type="text" name="sex" id="sex" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="marital_status">Marital Status:</label>
+                    <input type="text" name="marital_status" id="marital_status" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="address">Address:</label>
+                    <input type="text" name="address" id="address" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="city">City:</label>
+                    <input type="text" name="city" id="city" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="NIC">NIC:</label>
+                    <input type="text" name="NIC" id="NIC" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="joined_date">Joined Date:</label>
+                    <input type="date" name="joined_date" id="joined_date" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="years_spent">No of Years Spent in Here:</label>
+                    <input type="number" name="years_spent" id="years_spent" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="employment_status">Employment Status:</label>
+                    <select name="employment_status" id="employment_status" class="form-control">
+                        <option value="probation">Probation</option>
+                        <option value="contract">Contract</option>
+                        <option value="permanent">Permanent</option>
+                        <option value="terminated">Terminated</option>
+                        <option value="resigned">Resigned</option>
+                    </select><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="bank_acc_no">Bank Account No:</label>
+                    <input type="text" name="bank_acc_no" id="bank_acc_no" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="bank_code">Bank Code:</label>
+                    <input type="text" name="bank_code" id="bank_code" class="form-control"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="bank_branch_code">Bank Branch Code:</label>
+                    <input type="text" name="bank_branch_code" id="bank_branch_code" class="form-control"><br>
+                </div>
+                <div class="col-md-6">
+                    <label for="promotion_date">Time to be Promoted:</label>
+                    <input type="date" name="promotion_date" id="promotion_date" class="form-control"><br>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Employee</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
