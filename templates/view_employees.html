@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Employees</title>
+    <title>Employees</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Employees List</h1>
+        <h1>Employees</h1>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Employee No</th>
+                    <th>Employee Number</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Actions</th>
@@ -26,8 +26,8 @@
                     <td>{{ employee[1] }}</td>
                     <td>{{ employee[2] }}</td>
                     <td>
-                        <a href="{{ url_for('update_employee', id=employee[0]) }}" class="btn btn-primary">Update</a>
-                        <form action="{{ url_for('delete_employee', id=employee[0]) }}" method="POST" style="display:inline-block;">
+                        <a href="/update/{{ employee[0] }}" class="btn btn-primary">Update</a>
+                        <form action="/delete/{{ employee[0] }}" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </td>
@@ -35,7 +35,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{{ url_for('add_employee') }}" class="btn btn-success">Add New Employee</a>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
