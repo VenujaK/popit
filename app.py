@@ -105,7 +105,7 @@ def delete_employee(id):
     # Update terminated_employees foreign key references
     cur.execute("UPDATE terminated_employees SET employee_id = NULL WHERE employee_id = %s", (id,))
 
-    # Now, delete the employee record
+    # delete the employee record
     cur.execute("DELETE FROM employees WHERE id = %s", (id,))
     mysql.connection.commit()
     cur.close()
@@ -157,7 +157,6 @@ def performance_review(emp_no):
         feedback_achieved = request.form['feedback_achieved']
         emp_behavior_notes = request.form['emp_behavior_notes']
         
-        # Insert the performance review data into the database
         cur = mysql.connection.cursor()
         cur.execute("""
             INSERT INTO performance_reviews (emp_no, review_no, review_result, feedback, feedback_achieved, emp_behavior_notes)
