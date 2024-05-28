@@ -141,6 +141,28 @@ def terminated_employees():
     cur.close()
     return render_template('terminated_employees.html', terminated_employees=terminated_employees)
 
+@app.route('/performance/<int:emp_no>', methods=['GET', 'POST'])
+def performance_review(emp_no):
+    if request.method == 'POST':
+        review_no = request.form['review_no']
+        review_result = request.form['review_result']
+        feedback = request.form['feedback']
+        feedback_achieved = request.form['feedback_achieved']
+        emp_behavior_notes = request.form['emp_behavior_notes']
+        
+        # Insert the performance review data into the database
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            INSERT INTO performance_reviews (emp_no, review_no, review_result, feedback, feedback_achieved, emp_behavior_notes)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (emp_no, review_no, review_result, feedback, feedback_achieved, emp_behavior_notes))
+        mysql.connection.commit()
+        cur.close()
+        
+        return redirect(url_for('view_employees'))
+    
+    return render_template('performance_review.html', emp_no=emp_no)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
