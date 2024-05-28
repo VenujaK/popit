@@ -101,10 +101,17 @@ def update_employee(id):
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete_employee(id):
     cur = mysql.connection.cursor()
+
+    # Update terminated_employees foreign key references
+    cur.execute("UPDATE terminated_employees SET employee_id = NULL WHERE employee_id = %s", (id,))
+
+    # Now, delete the employee record
     cur.execute("DELETE FROM employees WHERE id = %s", (id,))
     mysql.connection.commit()
     cur.close()
-    return redirect(url_for('view_employees'))
+
+    return redirect(url_for('index'))
+
 
 # Terminate employee
 @app.route('/terminate/<int:id>', methods=['GET', 'POST'])
