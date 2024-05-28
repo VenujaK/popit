@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Terminated Employees</h1>
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employee Number</th>
+                <th>Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t_employee in terminated_employees %}
+            <tr>
+                <td>{{ t_employee[0] }}</td>
+                <td>{{ t_employee[1] }}</td>
+                <td>{{ t_employee[2] }}</td>
+                <td>{{ t_employee[3] }}</td>
+                <td>{{ t_employee[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -11,13 +11,11 @@ app.config['MYSQL_DB'] = 'popit'
 
 mysql = MySQL(app)
 
-# Main app route 
 @app.route('/')
 def index():
     return redirect(url_for('view_employees'))
 
-# View all employees
-@app.route('/employees')
+@app.route('/view_employees')
 def view_employees():
     cur = mysql.connection.cursor()
     cur.execute("SELECT id, first_name, last_name FROM employees")
@@ -25,7 +23,6 @@ def view_employees():
     cur.close()
     return render_template('view_employees.html', employees=employees)
 
-# Add employee
 @app.route('/add', methods=['GET', 'POST'])
 def add_employee():
     if request.method == 'POST':
@@ -52,7 +49,7 @@ def add_employee():
         bank_code = employee_data['bank_code']
         bank_branch_code = employee_data['bank_branch_code']
         promotion_date = employee_data['promotion_date']
-        
+
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO employees (first_name, last_name, position, contact_no, personal_email, work_email, manager, team_leader, blood_group, age, sex, marital_status, address, city, NIC, joined_date, years_spent, employment_status, bank_acc_no, bank_code, bank_branch_code, promotion_date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     (first_name, last_name, position, contact_no, personal_email, work_email, manager, team_leader, blood_group, age, sex, marital_status, address, city, NIC, joined_date, years_spent, employment_status, bank_acc_no, bank_code, bank_branch_code, promotion_date))
@@ -62,7 +59,6 @@ def add_employee():
 
     return render_template('add_employee.html')
 
-# Update employee
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_employee(id):
     cur = mysql.connection.cursor()
@@ -90,19 +86,18 @@ def update_employee(id):
         bank_code = employee_data['bank_code']
         bank_branch_code = employee_data['bank_branch_code']
         promotion_date = employee_data['promotion_date']
-        
-        cur.execute("UPDATE employees SET first_name = %s, last_name = %s, position = %s, contact_no = %s, personal_email = %s, work_email = %s, manager = %s, team_leader = %s, blood_group = %s, age = %s, sex = %s, marital_status = %s, address = %s, city = %s, NIC = %s, joined_date = %s, years_spent = %s, employment_status = %s, bank_acc_no = %s, bank_code = %s, bank_branch_code = %s, promotion_date = %s WHERE id = %s", 
+
+        cur.execute("UPDATE employees SET first_name = %s, last_name = %s, position = %s, contact_no = %s, personal_email = %s, work_email = %s, manager = %s, team_leader = %s, blood_group = %s, age = %s, sex = %s, marital_status = %s, address = %s, city = %s, NIC = %s, joined_date = %s, years_spent = %s, employment_status = %s, bank_acc_no = %s, bank_code = %s, bank_branch_code = %s, promotion_date = %s WHERE id = %s",
                     (first_name, last_name, position, contact_no, personal_email, work_email, manager, team_leader, blood_group, age, sex, marital_status, address, city, NIC, joined_date, years_spent, employment_status, bank_acc_no, bank_code, bank_branch_code, promotion_date, id))
         mysql.connection.commit()
         cur.close()
         return redirect(url_for('view_employees'))
-   
+
     cur.execute("SELECT * FROM employees WHERE id = %s", (id,))
     employee = cur.fetchone()
     cur.close()
-    return render_template('update_employee.html', employee=employee) 
+    return render_template('update_employee.html', employee=employee)
 
-# Delete employee
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete_employee(id):
     cur = mysql.connection.cursor()
@@ -110,6 +105,42 @@ def delete_employee(id):
     mysql.connection.commit()
     cur.close()
     return redirect(url_for('view_employees'))
+
+# Terminate employee
+@app.route('/terminate/<int:id>', methods=['GET', 'POST'])
+def terminate_employee(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        termination_data = request.form
+        employee_id = termination_data['employee_id']
+        date = termination_data['date']
+        reason = termination_data['reason']
+        status = termination_data['status']
+
+        cur.execute("INSERT INTO terminated_employees (employee_id, date, reason, status) VALUES (%s, %s, %s, %s)",
+                    (employee_id, date, reason, status))
+        mysql.connection.commit()
+        cur.execute("UPDATE employees SET employment_status = %s WHERE id = %s", (status, employee_id))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('view_employees'))
+
+    cur.execute("SELECT id, first_name, last_name FROM employees WHERE id = %s", (id,))
+    employee = cur.fetchone()
+
+    cur.execute("SELECT * FROM terminated_employees")
+    terminated_employees = cur.fetchall()
+    cur.close()
+    return render_template('terminate_employee.html', employee=employee, terminated_employees=terminated_employees)
+
+@app.route('/terminated_employees')
+def terminated_employees():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM terminated_employees")
+    terminated_employees = cur.fetchall()
+    cur.close()
+    return render_template('terminated_employees.html', terminated_employees=terminated_employees)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
