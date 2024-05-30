@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Payment Tracking Record</title>
+</head>
+<body>
+    <h1>Update Payment Tracking Record</h1>
+    <form action="{{ url_for('update_payment', id=payment_record[0]) }}" method="post">
+        <label for="invoice_date">Invoice Date:</label>
+        <input type="date" name="invoice_date" id="invoice_date" value="{{ payment_record[1] }}" required><br>
+        <label for="extended_date">Extended Date:</label>
+        <input type="date" name="extended_date" id="extended_date" value="{{ payment_record[2] }}" required><br>
+        <label for="company">Company:</label>
+        <input type="text" name="company" id="company" value="{{ payment_record[3] }}" required><br>
+        <label for="project">Project:</label>
+        <input type="text" name="project" id="project" value="{{ payment_record[4] }}" required><br>
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount" id="amount" value="{{ payment_record[5] }}" step="0.01" required><br>
+        <label for="status">Status:</label>
+        <select name="status" id="status" required>
+            <option value="ongoing" {% if payment_record[6] == 'ongoing' %} selected {% endif %}>Ongoing</option>
+            <option value="settled" {% if payment_record[6] == 'settled' %} selected {% endif %}>Settled</option>
+        </select><br>
+        <button type="submit">Update Payment</button>
+    </form>
+</body>
+</html>

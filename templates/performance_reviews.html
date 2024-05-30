@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Reviews</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <div class="container">
+        <h1>Performance Reviews</h1>
+        <!-- Form to filter by emp_no -->
+        <form method="POST">
+            <div class="form-group">
+                <label for="emp_no">Employee No:</label>
+                <input type="text" name="emp_no" id="emp_no" class="form-control" value="{{ emp_no }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <!-- Table to display performance reviews -->
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Employee No</th>
+                    <th>Review No</th>
+                    <th>Review Result</th>
+                    <th>Feedback</th>
+                    <th>Feedback Achieved</th>
+                    <th>Employee Behavior Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in performance_reviews %}
+                <tr>
+                    <td>{{ review[0] }}</td>
+                    <td>{{ review[1] }}</td>
+                    <td>{{ review[2] }}</td>
+                    <td>{{ review[3] }}</td>
+                    <td>{{ review[4] }}</td>
+                    <td>{{ review[5] }}</td>
+                    <td>{{ review[6] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% endblock %}
+</body>
+</html>

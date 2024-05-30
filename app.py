@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
+import MySQLdb
 
 app = Flask(__name__)
 
@@ -8,6 +9,15 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'popit'
+
+# Database connection
+conn = MySQLdb.connect(
+    host=app.config['MYSQL_HOST'],
+    user=app.config['MYSQL_USER'],
+    passwd=app.config['MYSQL_PASSWORD'],
+    db=app.config['MYSQL_DB']
+)
+cur = conn.cursor()
 
 mysql = MySQL(app)
 
@@ -169,6 +179,63 @@ def performance_review(emp_no):
     
     return render_template('performance_review.html', emp_no=emp_no)
 
+# Route to display performance reviews
+@app.route('/performance_reviews', methods=['GET', 'POST'])
+def performance_reviews():
+    emp_no = request.form.get('emp_no')  # Get the emp_no from the form
+    if emp_no:
+        cur.execute("SELECT * FROM performance_reviews WHERE emp_no = %s", (emp_no,))
+    else:
+        cur.execute("SELECT * FROM performance_reviews")
+    performance_reviews = cur.fetchall()
+    return render_template('performance_reviews.html', performance_reviews=performance_reviews, emp_no=emp_no)
+
+@app.route('/payment_tracking')
+def payment_tracking():
+    cur.execute("SELECT * FROM payment_tracking")
+    payment_records = cur.fetchall()
+    return render_template('payment_tracking.html', payment_records=payment_records)
+
+# Route to add a new payment tracking record
+@app.route('/add_payment', methods=['GET', 'POST'])
+def add_payment():
+    if request.method == 'POST':
+        invoice_date = request.form['invoice_date']
+        extended_date = request.form['extended_date']
+        company = request.form['company']
+        project = request.form['project']
+        amount = request.form['amount']
+        status = request.form['status']
+        cur.execute("INSERT INTO payment_tracking (invoice_date, extended_date, company, project, amount, status) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (invoice_date, extended_date, company, project, amount, status))
+        conn.commit()
+        return redirect(url_for('payment_tracking'))
+    return render_template('add_payment.html')
+
+# Route to update a payment tracking record
+@app.route('/update_payment/<int:id>', methods=['GET', 'POST'])
+def update_payment(id):
+    cur.execute("SELECT * FROM payment_tracking WHERE id = %s", (id,))
+    payment_record = cur.fetchone()
+    if request.method == 'POST':
+        invoice_date = request.form['invoice_date']
+        extended_date = request.form['extended_date']
+        company = request.form['company']
+        project = request.form['project']
+        amount = request.form['amount']
+        status = request.form['status']
+        cur.execute("UPDATE payment_tracking SET invoice_date = %s, extended_date = %s, company = %s, project = %s, amount = %s, status = %s WHERE id = %s",
+                    (invoice_date, extended_date, company, project, amount, status, id))
+        conn.commit()
+        return redirect(url_for('payment_tracking'))
+    return render_template('update_payment.html', payment_record=payment_record)
+
+# Route to delete a payment tracking record
+@app.route('/delete_payment/<int:id>', methods=['POST'])
+def delete_payment(id):
+    cur.execute("DELETE FROM payment_tracking WHERE id = %s", (id,))
+    conn.commit()
+    return redirect(url_for('payment_tracking'))
 
 if __name__ == '__main__':
     app.run(debug=True)
