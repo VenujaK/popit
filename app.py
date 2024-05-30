@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_mysqldb import MySQL
 import MySQLdb
 
+
 app = Flask(__name__)
 
 # MySQL Configuration
@@ -31,7 +32,7 @@ def view_employees():
     cur.execute("SELECT id, first_name, last_name FROM employees")
     employees = cur.fetchall()
     cur.close()
-    return render_template('view_employees.html', employees=employees)
+    return render_template('./Employee/view_employees.html', employees=employees)
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_employee():
@@ -67,7 +68,7 @@ def add_employee():
         cur.close()
         return redirect(url_for('view_employees'))
 
-    return render_template('add_employee.html')
+    return render_template('./Employee/add_employee.html')
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_employee(id):
@@ -106,7 +107,7 @@ def update_employee(id):
     cur.execute("SELECT * FROM employees WHERE id = %s", (id,))
     employee = cur.fetchone()
     cur.close()
-    return render_template('update_employee.html', employee=employee)
+    return render_template('./Employee/update_employee.html', employee=employee)
 
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete_employee(id):
@@ -148,7 +149,7 @@ def terminate_employee(id):
     cur.execute("SELECT * FROM terminated_employees")
     terminated_employees = cur.fetchall()
     cur.close()
-    return render_template('terminate_employee.html', employee=employee, terminated_employees=terminated_employees)
+    return render_template('./Employee/terminate_employee.html', employee=employee, terminated_employees=terminated_employees)
 
 @app.route('/terminated_employees')
 def terminated_employees():
@@ -156,7 +157,7 @@ def terminated_employees():
     cur.execute("SELECT * FROM terminated_employees")
     terminated_employees = cur.fetchall()
     cur.close()
-    return render_template('terminated_employees.html', terminated_employees=terminated_employees)
+    return render_template('./Employee/terminated_employees.html', terminated_employees=terminated_employees)
 
 @app.route('/performance/<int:emp_no>', methods=['GET', 'POST'])
 def performance_review(emp_no):
@@ -177,7 +178,7 @@ def performance_review(emp_no):
         
         return redirect(url_for('view_employees'))
     
-    return render_template('performance_review.html', emp_no=emp_no)
+    return render_template('./Employee/performance_review.html', emp_no=emp_no)
 
 # Route to display performance reviews
 @app.route('/performance_reviews', methods=['GET', 'POST'])
@@ -188,13 +189,41 @@ def performance_reviews():
     else:
         cur.execute("SELECT * FROM performance_reviews")
     performance_reviews = cur.fetchall()
-    return render_template('performance_reviews.html', performance_reviews=performance_reviews, emp_no=emp_no)
+    return render_template('./Employee/performance_reviews.html', performance_reviews=performance_reviews, emp_no=emp_no)
 
-@app.route('/payment_tracking')
+@app.route('/payment_tracking', methods=['GET', 'POST'])
 def payment_tracking():
-    cur.execute("SELECT * FROM payment_tracking")
-    payment_records = cur.fetchall()
-    return render_template('payment_tracking.html', payment_records=payment_records)
+    if request.method == 'POST':
+        # Handle form submission for filtering
+        invoice_date = request.form.get('invoice_date')
+        extended_date = request.form.get('extended_date')
+        company = request.form.get('company')
+        project = request.form.get('project')
+        
+        # Execute SQL query to filter payment records
+        cur = mysql.connection.cursor()
+        query = "SELECT * FROM payment_tracking WHERE 1=1"
+        if invoice_date:
+            query += f" AND invoice_date = '{invoice_date}'"
+        if extended_date:
+            query += f" AND extended_date = '{extended_date}'"
+        if company:
+            query += f" AND company = '{company}'"
+        if project:
+            query += f" AND project = '{project}'"
+        cur.execute(query)
+        filtered_records = cur.fetchall()
+        cur.close()
+        
+        return render_template('./Payment/payment_tracking.html', payment_records=filtered_records)
+    else:
+        # Execute SQL query to retrieve all payment records
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM payment_tracking")
+        all_records = cur.fetchall()
+        cur.close()
+        
+        return render_template('./Payment/payment_tracking.html', payment_records=all_records)
 
 # Route to add a new payment tracking record
 @app.route('/add_payment', methods=['GET', 'POST'])
@@ -210,7 +239,7 @@ def add_payment():
                     (invoice_date, extended_date, company, project, amount, status))
         conn.commit()
         return redirect(url_for('payment_tracking'))
-    return render_template('add_payment.html')
+    return render_template('./Payment/add_payment.html')
 
 # Route to update a payment tracking record
 @app.route('/update_payment/<int:id>', methods=['GET', 'POST'])
@@ -228,7 +257,7 @@ def update_payment(id):
                     (invoice_date, extended_date, company, project, amount, status, id))
         conn.commit()
         return redirect(url_for('payment_tracking'))
-    return render_template('update_payment.html', payment_record=payment_record)
+    return render_template('./Payment/update_payment.html', payment_record=payment_record)
 
 # Route to delete a payment tracking record
 @app.route('/delete_payment/<int:id>', methods=['POST'])

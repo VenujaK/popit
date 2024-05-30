@@ -75,6 +75,21 @@
                         </li>
                     </ul>
                 </div>
+            </li><li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#paymentMenu" role="button" aria-expanded="false" aria-controls="paymentMenu">
+                    Payment
+                </a>
+                <div class="collapse" id="paymentMenu">
+                    <ul class="nav flex-column ml-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('add_payment') }}">Add Payment</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('payment_tracking') }}">View Payments</a>
+                        </li>
+                       
+                    </ul>
+                </div>
             </li>
         </ul>
     </div>
