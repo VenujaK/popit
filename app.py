@@ -204,13 +204,13 @@ def payment_tracking():
         cur = mysql.connection.cursor()
         query = "SELECT * FROM payment_tracking WHERE 1=1"
         if invoice_date:
-            query += f" AND invoice_date = '{invoice_date}'"
+            query += f" AND invoice_date LIKE '%{invoice_date}%'"
         if extended_date:
-            query += f" AND extended_date = '{extended_date}'"
+            query += f" AND extended_date LIKE '%{extended_date}%'"
         if company:
-            query += f" AND company = '{company}'"
+            query += f" AND company LIKE '%{company}%'"
         if project:
-            query += f" AND project = '{project}'"
+            query += f" AND project LIKE '%{project}%'"
         cur.execute(query)
         filtered_records = cur.fetchall()
         cur.close()
@@ -224,6 +224,8 @@ def payment_tracking():
         cur.close()
         
         return render_template('./Payment/payment_tracking.html', payment_records=all_records)
+
+
 
 # Route to add a new payment tracking record
 @app.route('/add_payment', methods=['GET', 'POST'])

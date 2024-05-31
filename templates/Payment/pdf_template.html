@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Tracking Records - PDF</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Payment Tracking Records</h1>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Invoice Date</th>
+                    <th scope="col">Extended Date</th>
+                    <th scope="col">Company</th>
+                    <th scope="col">Project</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in payment_records %}
+                <tr>
+                    <th scope="row">{{ record[0] }}</th>
+                    <td>{{ record[1] }}</td>
+                    <td>{{ record[2] }}</td>
+                    <td>{{ record[3] }}</td>
+                    <td>{{ record[4] }}</td>
+                    <td>{{ record[5] }}</td>
+                    <td>{{ record[6] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
