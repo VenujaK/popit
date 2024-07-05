@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mysqldb import MySQL
 import MySQLdb
 
@@ -267,6 +267,77 @@ def delete_payment(id):
     cur.execute("DELETE FROM payment_tracking WHERE id = %s", (id,))
     conn.commit()
     return redirect(url_for('payment_tracking'))
+
+@app.route('/freelanceDB')
+def freelance_db():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM freelancers")
+    freelancers = cur.fetchall()
+    cur.close()
+    return render_template('./FreeanceDB/freelance_db.html', freelancers=freelancers)
+
+@app.route('/add_freelancer', methods=['GET', 'POST'])
+def add_freelancer():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        hourly_rate = request.form['hourly_rate']
+        contact = request.form['contact']
+        availability = request.form['availability']
+        address = request.form['address']
+        service_type = request.form['service_type']
+        service_description = request.form['service_description']
+        cv_link = request.form['cv_link']
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO freelancers (name, email, hourly_rate, contact, availability, address, service_type, service_description, cv_link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                    (name, email, hourly_rate, contact, availability, address, service_type, service_description, cv_link))
+        mysql.connection.commit()
+        cur.close()
+        flash('Freelancer added successfully!')
+        return redirect(url_for('freelance_db'))
+    return render_template('./FreeanceDB/add_freelancer.html')
+
+@app.route('/update_freelancer/<int:id>', methods=['GET', 'POST'])
+def update_freelancer(id):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM freelancers WHERE id = %s", [id])
+    freelancer = cur.fetchone()
+    cur.close()
+
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        hourly_rate = request.form['hourly_rate']
+        contact = request.form['contact']
+        availability = request.form['availability']
+        address = request.form['address']
+        service_type = request.form['service_type']
+        service_description = request.form['service_description']
+        cv_link = request.form['cv_link']
+
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            UPDATE freelancers
+            SET name = %s, email = %s, hourly_rate = %s, contact = %s, availability = %s, address = %s, service_type = %s, service_description = %s, cv_link = %s
+            WHERE id = %s
+        """, (name, email, hourly_rate, contact, availability, address, service_type, service_description, cv_link, id))
+        mysql.connection.commit()
+        cur.close()
+        flash('Freelancer updated successfully!')
+        return redirect(url_for('./FreeanceDB/freelance_db'))
+
+    return render_template('update_freelancer.html', freelancer=freelancer)
+
+@app.route('/delete_freelancer/<int:id>', methods=['POST'])
+def delete_freelancer(id):
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM freelancers WHERE id = %s", [id])
+    mysql.connection.commit()
+    cur.close()
+    flash('Freelancer deleted successfully!')
+    return redirect(url_for('./FreeanceDB/freelance_db'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

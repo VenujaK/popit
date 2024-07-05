@@ -75,7 +75,8 @@
                         </li>
                     </ul>
                 </div>
-            </li><li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#paymentMenu" role="button" aria-expanded="false" aria-controls="paymentMenu">
                     Payment
                 </a>
@@ -87,7 +88,21 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('payment_tracking') }}">View Payments</a>
                         </li>
-                       
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="collapse" href="#freelancerMenu" role="button" aria-expanded="false" aria-controls="freelancerMenu">
+                    Freelancers
+                </a>
+                <div class="collapse" id="freelancerMenu">
+                    <ul class="nav flex-column ml-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('freelance_db') }}">View Freelancers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('add_freelancer') }}">Add Freelancers</a>
+                        </li>
                     </ul>
                 </div>
             </li>
